@@ -8,11 +8,10 @@ from utils import seed_setting, get_summary_writer, record_configuration
 
 
 def main(args):
-    # 设置实验的随机性
+    # Randomness
     seed = args.seed
     seed_setting(seed)
-
-    # 设置显卡
+    # Device
     gpu_index = args.gpu_index
     device = args.device
     if device == 'gpu':
@@ -20,7 +19,7 @@ def main(args):
         torch.cuda.set_device(device)
     else:
         device = torch.device("cpu")
-    # 设置
+    # Configuration
     log_filepath = args.log_filepath
     dataset_config = {
         'dataset_name': args.dataset_name,
@@ -51,17 +50,18 @@ def main(args):
 
     train_dataloader, eval_dataloader, test_dataloader = build_dataloader(dataset_config)
     print('dataloader build finish')
-
+    # build loss function & optimizer & scheduler
     loss_fcn = build_loss_function(train_test_config)
     optimizer = build_optimizer(train_test_config, model)
-    scheduler = build_scheduler(train_test_config)
+    scheduler = build_scheduler(train_test_config, optimizer)
     print('loss_fcn optimizer scheduler build finish')
-
+    # train evaluation test
     model = train_eval_test_v1(model, optimizer, loss_fcn, scheduler, train_dataloader, eval_dataloader, test_dataloader,
                                summary_writer, train_test_config)
     return model
 
-# 启动函数
+
+# Entry
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings("ignore")
