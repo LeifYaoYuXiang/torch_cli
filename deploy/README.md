@@ -9,5 +9,5 @@ TorchScript是一种从Pytorch代码创建可序列化和可优化模型的方�
 
 # 1. Environment 运行环境
 ```shell
-pip install --upgrade git+https://github.com/autodeployai/daas-client.git
+
 ```
